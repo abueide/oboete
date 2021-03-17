@@ -1,2 +1,4 @@
 .idea/
 .mono/
+*.tmp
+.import/
