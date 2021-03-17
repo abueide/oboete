@@ -25,7 +25,7 @@ public class WordSprite : Sprite {
     private Label questionLabel;
     private Label answerLabel;
 
-    private Vector2 start = new Vector2(-400f, 0f);
+    private Vector2 start = new Vector2(0f, 0f);
     public Boolean active = false;
     private int speed = 150; // pixels per second
 
