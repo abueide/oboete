@@ -25,9 +25,9 @@ public class WordSprite : Sprite {
     private Label questionLabel;
     private Label answerLabel;
 
-    private Vector2 start = Vector2.Zero;
-    public Boolean active = true;
-    private int speed = 200; // pixels per second
+    private Vector2 start = new Vector2(-400f, 0f);
+    public Boolean active = false;
+    private int speed = 150; // pixels per second
 
     private JapaneseWord randomWord;
     private RandomNumberGenerator rng = new RandomNumberGenerator();
@@ -48,7 +48,6 @@ public class WordSprite : Sprite {
 
         if (active) {
             SetPosition(new Vector2(GetPosition().x + speed * delta, GetPosition().y));
-            GD.Print(GetPosition().x);
         }
     }
 

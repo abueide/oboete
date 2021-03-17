@@ -6,31 +6,30 @@ using System.Linq;
 public class Main : Node2D {
     private List<WordSprite> wordPool = new List<WordSprite>();
     PackedScene wordLabel = ResourceLoader.Load("res://WordSprite.tscn") as PackedScene;
-    
-    public override void _Ready()
-    {
+
+    public override void _Ready() {
         for (int i = 0; i < 20; i++) {
             var word = wordLabel.Instance();
             AddChild(word);
-            if (word.GetChildCount() > 0 && word.GetChild(0) is WordSprite) {
-                wordPool.Add(word.GetChild(0) as WordSprite);
-            }
+            wordPool.Add(word as WordSprite);
         }
+
     }
 
-  private float speed = 3; // seconds per word launch
-  private float timer = 0f;
-  private RandomNumberGenerator rng = new RandomNumberGenerator();
+    private float speed = 3; // seconds per word launch
+    private float timer = 0f;
+    private RandomNumberGenerator rng = new RandomNumberGenerator();
 
-  public override void _Process(float delta) {
-      timer += delta;
-      if (timer > speed) {
-          rng.Randomize();
-          var idleWords = wordPool.Where(x => x.active == false).ToList();
-          if (idleWords.Count > 0) {
-              // idleWords[rng.RandiRange(0,idleWords.Count - 1)].Activate();
-          }
-          timer = 0f;
-      }
-  }
+    public override void _Process(float delta) {
+        timer += delta;
+        if (timer > speed) {
+            rng.Randomize();
+            var idleWords = wordPool.Where(x => x.active == false).ToList();
+            if (idleWords.Count > 0) {
+                idleWords[rng.RandiRange(0, idleWords.Count - 1)].Activate();
+            }
+
+            timer = 0f;
+        }
+    }
 }
