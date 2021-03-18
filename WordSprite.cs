@@ -10,6 +10,7 @@ public class WordSprite : Sprite {
     // Declare member variables here. Examples:
     // private int a = 2;
     // private string b = "text";
+    
 
     // Called when the node enters the scene tree for the first time.
     private static List<JapaneseWord> words = new List<JapaneseWord>() {
@@ -23,6 +24,9 @@ public class WordSprite : Sprite {
         new JapaneseWord("genzou", "現像", "development"),
     };
 
+    [Signal]
+    public delegate void SpriteHit();
+    
     private Label questionLabel;
     private Label answerLabel;
 
@@ -42,8 +46,9 @@ public class WordSprite : Sprite {
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(float delta) {
-        if (GetPosition().x > 1000) {
+        if (GetPosition().x > 500) {
             GD.Print("Reset!");
+            EmitSignal(nameof(SpriteHit));
             reset();
         }
 
@@ -63,5 +68,9 @@ public class WordSprite : Sprite {
 
     public void Activate() {
         active = true;
+    }
+
+    public void Debug() {
+        GD.Print(active + " " + Position);
     }
 }

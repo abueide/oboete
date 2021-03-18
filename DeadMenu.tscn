@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://MenuTheme.tres" type="Theme" id=1]
 [ext_resource path="res://DeadMenu.cs" type="Script" id=2]
+[ext_resource path="res://Background.tscn" type="PackedScene" id=3]
 
 [node name="CenterContainer" type="CenterContainer"]
 anchor_right = 1.0
@@ -11,6 +12,8 @@ script = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="background" parent="." instance=ExtResource( 3 )]
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 margin_left = 202.0
@@ -35,3 +38,5 @@ margin_top = 84.0
 margin_right = 96.0
 margin_bottom = 125.0
 text = "出る"
+[connection signal="pressed" from="VBoxContainer/Again" to="." method="onAgain"]
+[connection signal="pressed" from="VBoxContainer/Exit" to="." method="onExit"]
