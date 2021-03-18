@@ -1,8 +1,8 @@
-
 using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Godot.Collections;
 using oboete;
 
@@ -10,23 +10,28 @@ public class WordSprite : Sprite {
     // Declare member variables here. Examples:
     // private int a = 2;
     // private string b = "text";
-    
+
 
     // Called when the node enters the scene tree for the first time.
     private static List<JapaneseWord> words = new List<JapaneseWord>() {
         new JapaneseWord("oboe", "覚え", "memorize"),
-        new JapaneseWord("hikikaeken", "引き換え券", "receipt"),
-        new JapaneseWord("magaru", "曲がる", "turn"),
-        new JapaneseWord("kariru", "借りる", "borrow"),
-        new JapaneseWord("mottekuru", "持ってくる", "bring"),
-        new JapaneseWord("motsu", "持つ", "carry"),
-        new JapaneseWord("undousuru", "運動する", "exercise"),
+        new JapaneseWord("mizu", "水着", "water"),
+        new JapaneseWord("hon", "本", "book"),
+        new JapaneseWord("ringo", "りんご", "apple"),
+        // new JapaneseWord("hikikaeken", "引き換え券", "receipt"),
+        // new JapaneseWord("magaru", "曲がる", "turn"),
+        // new JapaneseWord("kariru", "借りる", "borrow"),
+        // new JapaneseWord("mottekuru", "持ってくる", "bring"),
+        // new JapaneseWord("motsu", "持つ", "carry"),
+        // new JapaneseWord("undousuru", "運動する", "exercise"),
         new JapaneseWord("genzou", "現像", "development"),
     };
 
     [Signal]
     public delegate void SpriteHit();
-    
+    [Signal]
+    public delegate void Score();
+
     private Label questionLabel;
     private Label answerLabel;
 
@@ -38,8 +43,8 @@ public class WordSprite : Sprite {
     private RandomNumberGenerator rng = new RandomNumberGenerator();
 
     public override void _Ready() {
-        questionLabel = GetChild(0) as Label;
-        answerLabel = GetChild(1) as Label;
+        questionLabel = GetNode("VBox/QuestionLabel") as Label;
+        answerLabel = GetNode("VBox/AnswerLabel") as Label;
         reset();
     }
 
@@ -57,13 +62,35 @@ public class WordSprite : Sprite {
         }
     }
 
+    public void handleKey(Char c) {
+        int index = answerLabel.Text.IndexOf('_');
+        if (index != -1 && randomWord.meaning[index].ToString().ToLower().Equals(c.ToString().ToLower())) {
+            var builder = new StringBuilder(answerLabel.Text);
+            builder[index] = c;
+            answerLabel.Text = builder.ToString();
+        }
+        
+        index = answerLabel.Text.IndexOf('_');
+        if (index == -1) {
+            reset();
+            EmitSignal(nameof(Score));
+        }
+    }
+
+
     public void reset() {
         rng.Randomize();
+        questionLabel.Text = "";
+        answerLabel.Text = "";
+        randomWord = words[rng.RandiRange(0, words.Count - 1)];
         active = false;
         start.y = rng.RandfRange(0f, 220f);
         SetPosition(start);
-        randomWord = words[rng.RandiRange(0, words.Count - 1)];
+
         questionLabel.Text = randomWord.kanji;
+        for (int i = 0; i < randomWord.meaning.Length; i++) {
+            answerLabel.Text += "_";
+        }
     }
 
     public void Activate() {
@@ -71,6 +98,6 @@ public class WordSprite : Sprite {
     }
 
     public void Debug() {
-        GD.Print(active + " " + Position);
+        GD.Print(active + " " + Position + " " + randomWord.meaning);
     }
 }

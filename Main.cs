@@ -18,6 +18,7 @@ public class Main : Node2D {
             AddChild(word);
             wordPool.Add(word as WordSprite);
             word.Connect("SpriteHit", hud, nameof(hud.OnSpriteHit));
+            word.Connect("Score", hud, nameof(hud.OnScore));
         }
 
         activateRandom();
@@ -32,12 +33,19 @@ public class Main : Node2D {
 
     public override void _Process(float delta) {
         timer += delta;
+        var sorted = wordPool.OrderByDescending(x => x.Position.x);
+        current = sorted.First();
         if (timer > speed) {
             activateRandom();
             timer = 0f;
         }
+    }
 
-        first.Debug();
+    public override void _UnhandledInput(InputEvent @event) {
+        if (@event is InputEventKey && @event.IsPressed()) {
+            current.handleKey(@event.AsText()[0]);
+            GD.Print(@event.AsText()[0]);
+        }
     }
 
     public void onDead() {
@@ -47,7 +55,6 @@ public class Main : Node2D {
     public void activateRandom() {
         rng.Randomize();
         var idleWords = wordPool.Where(x => x.active == false).ToList();
-        current = wordPool.OrderByDescending(x => x.Position.x).First();
         if (idleWords.Count > 0) {
             if (first == null) {
                 first = idleWords[rng.RandiRange(0, idleWords.Count - 1)];
@@ -57,4 +64,5 @@ public class Main : Node2D {
             }
         }
     }
+    
 }
