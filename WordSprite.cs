@@ -18,6 +18,16 @@ public class WordSprite : Sprite {
         new JapaneseWord("mizu", "水着", "water"),
         new JapaneseWord("hon", "本", "book"),
         new JapaneseWord("ringo", "りんご", "apple"),
+        new JapaneseWord("haku", "はく", "pants"),
+        new JapaneseWord("kakeru", "かける", "glasses"),
+        new JapaneseWord("kiru", "きる", "shirt"),
+        new JapaneseWord("hashi", "はし", "chopsticks"),
+        new JapaneseWord("shigoto", "仕事", "job"),
+        new JapaneseWord("kaishain", "会社員", "worker"),
+        new JapaneseWord("natsu", "なつ", "summer"),
+        new JapaneseWord("soujisuru", "そうじする", "clean"),
+        new JapaneseWord("sentakusuru", "せんたくする", "laundry"),
+        // new JapaneseWord("", "", ""),
         // new JapaneseWord("hikikaeken", "引き換え券", "receipt"),
         // new JapaneseWord("magaru", "曲がる", "turn"),
         // new JapaneseWord("kariru", "借りる", "borrow"),
@@ -37,7 +47,7 @@ public class WordSprite : Sprite {
 
     private Vector2 start = new Vector2(-200, 0f);
     public Boolean active = false;
-    private int speed = 150; // pixels per second
+    private int speed = 100; // pixels per second
 
     private JapaneseWord randomWord;
     private RandomNumberGenerator rng = new RandomNumberGenerator();
@@ -67,7 +77,7 @@ public class WordSprite : Sprite {
         if (index != -1 && randomWord.meaning[index].ToString().ToLower().Equals(c.ToString().ToLower())) {
             var builder = new StringBuilder(answerLabel.Text);
             builder[index] = c;
-            answerLabel.Text = builder.ToString();
+            answerLabel.Text = builder.ToString().ToLower();
         }
         
         index = answerLabel.Text.IndexOf('_');
@@ -84,7 +94,7 @@ public class WordSprite : Sprite {
         answerLabel.Text = "";
         randomWord = words[rng.RandiRange(0, words.Count - 1)];
         active = false;
-        start.y = rng.RandfRange(0f, 220f);
+        start.y = rng.RandfRange(20f, 220f);
         SetPosition(start);
 
         questionLabel.Text = randomWord.kanji;
